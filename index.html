@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random objection</title>
+    <style>
+        *, *:before, *:after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        iframe {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="iframe"></iframe>
+    <script>
+        const randomNumber = (min, max) => {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        };
+
+        // make it so you get the other poses
+        const poses = [140, 271];
+
+        // 140 is breakdown
+        // 271 is Yell
+
+        const text = 'I\'m testing this stuff out';
+        const bubbleType = randomNumber(1, 3);
+        const pose = poses[randomNumber(0, poses.length -1)];
+        const requestBody = {
+            "frame": {
+                "id": -1,
+                "iid": 0,
+                "text": `[#bgmd]${text}`,
+                "poseId": pose,
+                "pairPoseId": null,
+                "bubbleType": bubbleType,
+                "username": "",
+                "mergeNext": false,
+                "doNotTalk": false,
+                "keepDialogue": false,
+                "goNext": false,
+                "poseAnimation": true,
+                "flipped": null,
+                "blip": null,
+                "frameActions": [],
+                "frameFades": [],
+                "characterId": null,
+                "popupId": null,
+                "pairId": null,
+                "transition": null,
+                "filter": null
+            }
+        };
+
+        const doWork = async () => {
+            const response = await fetch('https://api.objection.lol/objection/submit', {
+                method: 'POST',
+                body: JSON.stringify(requestBody),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const id = await response.text();
+            const iframe = document.getElementById('iframe');
+            iframe.src = `https://objection.lol/embed/${id}`;
+            setTimeout(() => {
+                debugger;
+                //find button inside iframe
+                // let button = iframe.contents().find('.clickable');
+
+                //trigger button click
+                // button.trigger("click");
+            }, 3000);
+        };
+
+        doWork();
+
+        console.log('hello world');
+
+    </script>
+</body>
+</html>
